@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour
 {
+    Rigidbody rigidBody;
+    AudioSource thrust;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidBody = GetComponent<Rigidbody>();
+        thrust = GetComponent<AudioSource>();
+        thrust.Stop();
     }
 
     // Update is called once per frame
@@ -21,15 +26,27 @@ public class Rocket : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Space))
         {
+            rigidBody.AddRelativeForce(Vector3.up);
+            if (!thrust.isPlaying) //so it doesn't layer
+            {
+                thrust.Play();
+            }
+            thrust.mute = false;
             print("Thrusting");
         }
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        else
         {
-            print("Rotate left.");
+            thrust.mute = true;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        {
+            transform.Rotate(Vector3.forward);
+            print("Rotating left.");
         }
         else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
-            print("Rotate right.");
+            transform.Rotate(Vector3.back);
+            print("Rotating right.");
         }
     }
 }
